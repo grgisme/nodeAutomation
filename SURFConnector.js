@@ -4,13 +4,14 @@
 //Load the fs & zombie modules
 var fs = require('fs');
 var Horseman = require("node-horseman");
+var config = require('config.json');
 //const Browser = require('zombie');
 
 
 var SURFBrowser = require("./SURFBrowser");
 
 var surf = new SURFBrowser();
-surf.setCredentials("garrett.griffin@cernasolutions.com", "Sab0tag3r!");
+surf.setCredentials(config.surfUsername, config.surfPassword);
 surf.grabDeployments(processTimeCards);
 
 
@@ -18,12 +19,12 @@ surf.grabDeployments(processTimeCards);
 
 function processTimeCards(text) {
 
-    var auth = "Basic " + new Buffer("garrett.griffin.admin" + ":" + "Sab0tag3r!").toString("base64");
+    var auth = "Basic " + new Buffer(config.cernaHubUsername + ":" + config.cernaHubPassword).toString("base64");
     var request = require('request');
 
     request(
         {
-                url : "https://cernasolutionsdemo1.service-now.com/sys_import.do?sysparm_import_set_tablename=u_import_deployment&sysparm_transform_after_load=true",
+                url : config.cernaHubURL+"sys_import.do?sysparm_import_set_tablename=u_import_deployment&sysparm_transform_after_load=true",
             headers : {
                 "Authorization" : auth
             }

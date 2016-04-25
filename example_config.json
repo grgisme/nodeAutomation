@@ -1,0 +1,7 @@
+{
+  "cernaHubUsername": "adminAccount",
+  "cernaHubPassword": "cerna",
+  "cernaHubURL": "https://cernasolutionsdemo.service-now.com/",
+  "surfUsername": "surfAccount",
+  "surfPassword": "surfPassword"
+}
