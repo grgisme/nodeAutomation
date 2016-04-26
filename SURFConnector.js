@@ -41,7 +41,7 @@ function processTimeCards(text) {
     console.log("Processing Time Cards");
     console.log("Doing nothing to process Time Cards for now.");
     //postJSONToImportSet("u_import_resource_plans", text);
-    done++;
+    numDone++;
 }
 
 function textToFile(text, fileName) {
