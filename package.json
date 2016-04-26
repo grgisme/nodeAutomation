@@ -7,7 +7,8 @@
   "dependencies": {
     "node-horseman": "^3.0.1",
     "request": "^2.72.0",
-    "restler": "^3.4.0"
+    "restler": "^3.4.0",
+    "tmp": "^0.0.28"
   },
   "devDependencies": {},
   "scripts": {
