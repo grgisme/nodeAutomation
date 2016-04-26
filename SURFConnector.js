@@ -57,8 +57,14 @@ function json2csv(theArray) {
 }
 
 function postJSONToImportSet(importSetName, text) {
-
-    var result = JSON.parse(text);
+    var result;
+    try {
+        result = JSON.parse(text);
+    }
+    catch(err) {
+        numDone++;
+        return false;
+    }
     //var objArray = normalizeJSON(result.records);
 
 
