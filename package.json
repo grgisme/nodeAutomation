@@ -8,7 +8,9 @@
     "node-horseman": "2.8.2",
     "request": "^2.72.0",
     "restler": "^3.4.0",
-    "tmp": "^0.0.28"
+    "tmp": "^0.0.28",
+    "json-2-csv": "grgisme/json-2-csv",
+    "deasync": "^0.1.5"
   },
   "devDependencies": {},
   "scripts": {
