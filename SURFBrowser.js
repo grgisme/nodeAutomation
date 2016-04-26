@@ -41,7 +41,7 @@ SURFBrowser.prototype.setPassword = function (password) {
 };
 
 SURFBrowser.prototype.grabTimeCards = function(callBackFunction) {
-    this.browser
+    new Horseman()
         .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0")
         .log("About to grab Resource Plans -- logging in")
         //.on('resourceError', function(resourceError) { console.log(resourceError.errorString); console.log(StringresourceError.url); })
@@ -63,7 +63,8 @@ SURFBrowser.prototype.grabTimeCards = function(callBackFunction) {
         .open("https://surf.service-now.com/time_card_list.do?JSONv2")
         .wait(5000)
         .text('pre')
-        .then(callBackFunction);
+        .then(callBackFunction)
+        .close();
 };
 
 SURFBrowser.prototype.grabDeployments = function(callBackFunction) {
@@ -90,7 +91,8 @@ SURFBrowser.prototype.grabDeployments = function(callBackFunction) {
         .open("https://surf.service-now.com/u_deployment_list.do?JSONv2")
         .wait(5000)
         .text('pre')
-        .then(callBackFunction);
+        .then(callBackFunction)
+        .close();
 };
 
 SURFBrowser.prototype.grabResourcePlans = function(callBackFunction) {
@@ -116,7 +118,8 @@ SURFBrowser.prototype.grabResourcePlans = function(callBackFunction) {
         .open("https://surf.service-now.com/u_billing_rates_list.do?JSONv2")
         .wait(5000)
         .text('pre')
-        .then(callBackFunction);
+        .then(callBackFunction)
+        .close();
 };
 
 SURFBrowser.prototype.markLoggedIn = function() {
