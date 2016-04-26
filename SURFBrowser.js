@@ -49,7 +49,6 @@ SURFBrowser.prototype.login = function() {
             .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0")
             .on('resourceError', function(resourceError) { console.log(resourceError.errorString); console.log(resourceError.url); })
             .on('timeout', function(msg){ console.log(msg); })
-            .on('loadFinished', function(status) { console.log(status); })
             .open('https://surf.service-now.com/')
             .waitForSelector('#username')
             .log("At Login Page")
