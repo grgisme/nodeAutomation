@@ -23,8 +23,7 @@ surf.grabDeployments(processDeployments);
 surf.grabResourcePlans(processResourcePlans);
 surf.grabTimeCards(processTimeCards);
 deasync.loopWhile(function(){if(numDone < 3) return false; else return true;});
-
-
+surf.close()
 
 
 function processDeployments(text) {
