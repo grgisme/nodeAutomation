@@ -9,8 +9,8 @@ var SURFBrowser = function () {
         return SURFBrowser.instance;
     }
 
-    this.browser = new Horseman();
-    //{"timeout": 30000}
+    this.browser = new Horseman({"timeout": 30000});
+    //
     this.loggedIn = false;
 
     // cache
@@ -49,8 +49,8 @@ SURFBrowser.prototype.login = function() {
         return SURFBrowser().browser
             .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0")
             //.on('resourceError', function(resourceError) { console.log(resourceError.errorString); console.log(StringresourceError.url); })
-            .on('urlChanged', function(targetUrl) { console.log("Navigating to: "+targetUrl)})
-            .on('timeout', function(msg){ console.log(msg); })
+            //.on('urlChanged', function(targetUrl) { console.log("Navigating to: "+targetUrl)})
+            .on('timeout', function(msg){ console.log("Timeout: "+msg); })
             .open('https://surf.service-now.com/')
             .waitForSelector('#username')
             .log("At Login Page")
@@ -64,7 +64,7 @@ SURFBrowser.prototype.login = function() {
             .wait(5000)
             .log("At SURF Home Page")
             .screenshot("homepage.png")
-            .then(SURFBrowser().markLoggedIn)
+            .then(this.markLoggedIn)
             .then( resolve );
     });
 };
@@ -96,8 +96,10 @@ SURFBrowser.prototype.grabDeployments = function(callBackFunction) {
 SURFBrowser.prototype.grabDeploymentsCSV = function(callBackFunction) {
     this.browser
         .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0")
+        .log("About to grab Deployments CSV -- logging in if needed")
         .open('https://google.com/')
         .then(this.login)
+        .log("Logged In, now going to grab the deployment list")
         .open("https://surf.service-now.com/u_deployment_list.do?CSV")
         .waitForNextPage()
         .wait(25000)
