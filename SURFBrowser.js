@@ -9,7 +9,8 @@ var SURFBrowser = function () {
         return SURFBrowser.instance;
     }
 
-    this.browser = new Horseman({"timeout": 30000});
+    this.browser = new Horseman();
+    //{"timeout": 30000}
     this.loggedIn = false;
 
     // cache
