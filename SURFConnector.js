@@ -20,11 +20,11 @@ var SURFBrowser = require("./SURFBrowser");
 var surf = new SURFBrowser();
 surf.setCredentials(config.surfUsername, config.surfPassword);
 surf.grabDeployments(processDeployments);
-deasync.loopWhile(function(){if(numDone < 1) return false; else return true;});
+deasync.loopWhile(function(){return (numDone < 1);});
 surf.grabResourcePlans(processResourcePlans);
-deasync.loopWhile(function(){if(numDone < 2) return false; else return true;});
+deasync.loopWhile(function(){return (numDone < 2);});
 surf.grabTimeCards(processTimeCards);
-deasync.loopWhile(function(){if(numDone < 3) return false; else return true;});
+deasync.loopWhile(function(){return (numDone < 3);});
 surf.close();
 
 
