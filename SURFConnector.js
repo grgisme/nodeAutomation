@@ -94,8 +94,7 @@ function postJSONToImportSet(importSetName, text) {
 
     var csv = json2csv(result.records);
 
-    var tmpobj = tmp.fileSync();
-    var fileName = tmpobj.name;
+    var fileName = importSetName+"_tmp.csv";
     textToFile(csv, fileName);
 
     fs.stat(fileName, function(err, stats) {
@@ -107,7 +106,7 @@ function postJSONToImportSet(importSetName, text) {
                 'uploadfile': rest.file(fileName, null, stats.size, null, 'text/csv')
             }
         }).on("complete", function(data) {
-            console.log(data);
+            fs.unlinkSync(fileName);
         });
     });
     /*
