@@ -47,7 +47,8 @@ SURFBrowser.prototype.login = function() {
     return new Promise( function( resolve, reject ){
         return SURFBrowser().browser
             .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0")
-            .on('error', function(msg, trace){ console.log(msg); console.log(trace); })
+            .on('timeout', function(msg){ console.log(msg); })
+            .on('loadFinished', function(status) { console.log(status); })
             .open('https://surf.service-now.com/')
             .waitForSelector('#username')
             .log("At Login Page")
