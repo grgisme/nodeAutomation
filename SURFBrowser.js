@@ -9,10 +9,6 @@ var SURFBrowser = function () {
         return SURFBrowser.instance;
     }
 
-    this.browser = new Horseman();
-    //{"timeout": 180000}
-    this.loggedIn = false;
-
     // cache
     SURFBrowser.instance = this;
 };
@@ -28,8 +24,8 @@ SURFBrowser.getInstance = function() {
 };
 
 SURFBrowser.prototype.setCredentials = function (username, password) {
-    this.username = username;
-    this.password = password;
+    this.setUsername(username);
+    this.setPassword(password);
 };
 
 SURFBrowser.prototype.setUsername = function (username) {
@@ -60,7 +56,7 @@ SURFBrowser.prototype.grabTimeCards = function(callBackFunction) {
         .wait(5000)
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the time card list")
-        .open("https://surf.service-now.com/time_card_list.do?JSONv2")
+        .open("https://surf.service-now.com/time_card_list.do?JSONv2&displayvalue=true")
         .wait(5000)
         .text('pre')
         .then(callBackFunction)
@@ -88,7 +84,7 @@ SURFBrowser.prototype.grabDeployments = function(callBackFunction) {
         .log("At SURF Home Page")
         //.screenshot("homepage.png")
         .log("Logged In, now going to grab the deployment list")
-        .open("https://surf.service-now.com/u_deployment_list.do?JSONv2")
+        .open("https://surf.service-now.com/u_deployment_list.do?JSONv2&displayvalue=true")
         .wait(5000)
         .text('pre')
         .then(callBackFunction)
@@ -115,19 +111,11 @@ SURFBrowser.prototype.grabResourcePlans = function(callBackFunction) {
         .wait(5000)
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the resource plan list")
-        .open("https://surf.service-now.com/u_billing_rates_list.do?JSONv2")
+        .open("https://surf.service-now.com/u_billing_rates_list.do?JSONv2&displayvalue=true")
         .wait(5000)
         .text('pre')
         .then(callBackFunction)
         .close();
-};
-
-SURFBrowser.prototype.markLoggedIn = function() {
-    this.loggedIn = true;
-};
-
-SURFBrowser.prototype.close = function() {
-    this.browser.close();
 };
 
 
