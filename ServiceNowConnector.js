@@ -24,7 +24,7 @@ ServiceNowConnector.prototype.setURL = function (url) {
 ServiceNowConnector.prototype._jsonToCSV = function(theArray) {
     var done = false;
     var data = false;
-    converter.json2csv(theArray, function cb(err, res) { data = res; done = true; }, { "checkSchemaDifferences": false });
+    converter.json2csv(theArray, function cb(err, res) { data = res; done = true; }, { "checkSchemaDifferences": false, "emptyFieldValue": "" });
     de_async.loopWhile(function(){return !done;});
     return data;
 };
@@ -73,7 +73,7 @@ ServiceNowConnector.prototype.postJSONToImportSet = function(importSetName, text
     fs.writeFileSync(fileName, csv);
 
     result = this._postFileToImportSet(importSetName, fileName);
-    //fs.unlinkSync(fileName);
+    fs.unlinkSync(fileName);
     return result;
 };
 
