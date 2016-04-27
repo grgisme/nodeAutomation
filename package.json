@@ -15,7 +15,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node SURFConnector.js",
+    "start": "node Surf2Cerna.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
