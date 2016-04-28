@@ -40,7 +40,7 @@ ServiceNowConnector.prototype._post = function(url, options) {
     rest.post(url, options)
         .on("complete", function(data) {
             if (data instanceof Error) {
-                console.log('Error:', result.message);
+                console.log('Error:', data.message);
                 postDone = true;
                 postResponse = false;
             } else {
