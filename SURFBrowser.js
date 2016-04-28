@@ -74,7 +74,7 @@ SURFBrowser.prototype.grabDeployments = function(callBackFunction) {
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the deployment list")
         .open("https://surf.service-now.com/u_deployment_list.do?JSONv2&displayvalue=true")
-        .wait(15000)
+        .wait(25000)
         .text('pre')
         .then(callBackFunction)
         .close();
