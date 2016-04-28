@@ -38,9 +38,15 @@ ServiceNowConnector.prototype._post = function(url, options) {
     var postDone = false;
     var postResponse = false;
     rest.post(url, options)
-        .on("complete", function(result, data) {
-            postDone = true;
-            postResponse = data;
+        .on("complete", function(data) {
+            if (data instanceof Error) {
+                console.log('Error:', result.message);
+                postDone = true;
+                postResponse = false;
+            } else {
+                postDone = true;
+                postResponse = data;
+            }
         });
     de_async.loopWhile(function(){return !postDone;});
     return postResponse;
@@ -112,7 +118,7 @@ ServiceNowConnector.prototype.deleteRecord = function(table, recordID) {
 
 ServiceNowConnector.prototype._makeJSONCall = function(table, type, sys_id, query, data) {
 
-    var url = table+".do?JSONv2";
+    var url = "/"+table+".do?JSONv2";
     if(typeof data == "undefined") {
         data = {};
     }
