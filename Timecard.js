@@ -24,8 +24,6 @@ if(timeCards !== false) {
             continue;
         }
         user = user[0];
-        for(var x in user)
-            console.log(x+" - "+user[x]);
         //Submit the time cards we found...
         //noinspection JSUnresolvedVariable
         var timeCardObj = {
@@ -50,8 +48,7 @@ if(timeCards !== false) {
         var tcDone = false;
         //Initialize SURFBrowser
         var surf = new SURFBrowser();
-        console.log("Username: "+user.u_surf_username);
-        console.log("Password: "+user.u_surf_password_decrypted);
+        //noinspection JSUnresolvedVariable
         surf.setCredentials(user.u_surf_username, user.u_surf_password_decrypted);
         surf.insertTimeCard(timeCardObj, function() {
             console.log("Time Card Submitted");
@@ -60,7 +57,8 @@ if(timeCards !== false) {
         de_async.loopWhile(function(){//noinspection JSReferencingMutableVariableFromClosure
             return !tcDone;
         });
-        //Flag timecard as updated.
+        //Flag time card as updated.
+        //noinspection JSUnresolvedVariable
         hub.updateRecord("time_card", timeCard.sys_id, {
             "u_submitted": "true",
             "u_surf_submitted": "true"

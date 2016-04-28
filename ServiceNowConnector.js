@@ -52,6 +52,24 @@ ServiceNowConnector.prototype._post = function(url, options) {
     return postResponse;
 };
 
+ServiceNowConnector.prototype._postJSON = function(url, data) {
+    var postDone = false;
+    var postResponse = false;
+    rest.postJson(url, data, {"username": this.username, "password": this.password})
+        .on("complete", function(data) {
+            if (data instanceof Error) {
+                console.log('Error:', result.message);
+                postDone = true;
+                postResponse = false;
+            } else {
+                postDone = true;
+                postResponse = data;
+            }
+        });
+    de_async.loopWhile(function(){return !postDone;});
+    return postResponse;
+};
+
 ServiceNowConnector.prototype._postFileToImportSet = function(importSetName, fileName) {
 
     var stats = fs.statSync(fileName);
@@ -108,7 +126,7 @@ ServiceNowConnector.prototype.createRecord = function(table, data) {
 };
 
 ServiceNowConnector.prototype.updateRecord = function(table, recordID, data) {
-    var query = "sysparm_sys_id="+recordID;
+    var query = "sys_id="+recordID;
     return this._makeJSONCall(table, this.UPDATE, false, query, data);
 };
 
@@ -118,7 +136,7 @@ ServiceNowConnector.prototype.deleteRecord = function(table, recordID) {
 
 ServiceNowConnector.prototype._makeJSONCall = function(table, type, sys_id, query, data) {
 
-    var url = "/"+table+".do?JSONv2";
+    var url = table+".do?JSONv2";
     if(typeof data == "undefined") {
         data = {};
     }
@@ -169,14 +187,11 @@ ServiceNowConnector.prototype._makeJSONCall = function(table, type, sys_id, quer
         else return false;
     }
 
-    var response = this._post(this.url + url, {
-        username: this.username,
-        password: this.password,
-        data: data
-    });
+    var response = this._postJSON(this.url + url, data);
 
 
     if(typeof response.error != "undefined") {
+        console.log("ServiceNow spit back an error.");
         console.log("ERROR: "+response.error);
         return false;
     }
