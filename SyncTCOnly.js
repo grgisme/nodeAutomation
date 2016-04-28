@@ -23,4 +23,4 @@ surf.grabTimeCards(function(text) {
     hub.postJSONToImportSet("u_import_time_cards_from_surf", text);
     numDone++;
 });
-de_async.loopWhile(function(){return (numDone < 3);});
+de_async.loopWhile(function(){return (numDone < 1);});
