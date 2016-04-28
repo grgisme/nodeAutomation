@@ -52,7 +52,7 @@ SURFBrowser.prototype.grabTimeCards = function(callBackFunction) {
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the time card list")
         .open("https://surf.service-now.com/time_card_list.do?JSONv2&displayvalue=true")
-        .wait(10000)
+        .wait(15000)
         .text('pre')
         .then(callBackFunction)
         .close();
@@ -74,7 +74,7 @@ SURFBrowser.prototype.grabDeployments = function(callBackFunction) {
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the deployment list")
         .open("https://surf.service-now.com/u_deployment_list.do?JSONv2&displayvalue=true")
-        .wait(10000)
+        .wait(15000)
         .text('pre')
         .then(callBackFunction)
         .close();
@@ -96,7 +96,7 @@ SURFBrowser.prototype.grabResourcePlans = function(callBackFunction) {
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the resource plan list")
         .open("https://surf.service-now.com/u_billing_rates_list.do?JSONv2&displayvalue=true")
-        .wait(10000)
+        .wait(15000)
         .text('pre')
         .then(callBackFunction)
         .close();
