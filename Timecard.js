@@ -54,7 +54,13 @@ if(timeCards !== false) {
             tcDone = true;
         }, true);
         de_async.loopWhile(function(){//noinspection JSReferencingMutableVariableFromClosure
-            return !tcDone;});
+            return !tcDone;
+        });
+        //Flag timecard as updated.
+        hub.updateRecord("time_card", timeCard.sys_id, {
+            "u_submitted": "true",
+            "u_surf_submitted": "true"
+        });
     }
 }
 else {
