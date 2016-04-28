@@ -21,10 +21,8 @@ if(timeCards !== false) {
     console.log("Found "+timeCards.length+" time cards.");
     for(var i=0; i<timeCards.length; i++) {
         var timeCard = timeCards[i];
-        for(var x in timeCard)
-            console.log(x+" - "+timeCard[x]);
         //noinspection JSUnresolvedVariable
-        var user = hub.getSingleRecord("sys_user", timeCard.u_user);
+        var user = hub.getSingleRecord("sys_user", timeCard.user);
         if(user === false) {
             console.log("Error: User record not successfully grabbed. Time card being skipped.");
             continue;
