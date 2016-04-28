@@ -61,6 +61,7 @@ ServiceNowConnector.prototype.postJSONToImportSet = function(importSetName, text
         result = JSON.parse(text);
     }
     catch(err) {
+        console.log("ERROR: "+importSetName+" will not be processed properly due to JSON parsing error.");
         return false;
     }
     //var objArray = normalizeJSON(result.records);
