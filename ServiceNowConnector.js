@@ -74,6 +74,8 @@ ServiceNowConnector.prototype.postJSONToImportSet = function(importSetName, text
     fs.writeFileSync(fileName, csv);
 
     result = this._postFileToImportSet(importSetName, fileName);
+    if(result !== false)
+        console.log("Successfully posted "+importSetName);
     fs.unlinkSync(fileName);
     return result;
 };
