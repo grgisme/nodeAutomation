@@ -17,8 +17,6 @@ if(timeCards !== false) {
     console.log("Found "+timeCards.length+" time cards.");
     for(var i=0; i<timeCards.length; i++) {
         var timeCard = timeCards[i];
-        for(var x in timeCard)
-            console.log(x+" - "+timeCard[x]);
         //noinspection JSUnresolvedVariable
         var user = hub.getSingleRecord("sys_user", timeCard.user);
         if(user === false) {
@@ -26,6 +24,8 @@ if(timeCards !== false) {
             continue;
         }
         user = user[0];
+        for(var x in user)
+            console.log(x+" - "+user[x]);
         //Submit the time cards we found...
         //noinspection JSUnresolvedVariable
         var timeCardObj = {
