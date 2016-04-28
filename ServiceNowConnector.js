@@ -38,7 +38,7 @@ ServiceNowConnector.prototype._post = function(url, options) {
     var postDone = false;
     var postResponse = false;
     rest.post(url, options)
-        .on("complete", function(data) {
+        .on("complete", function(result, data) {
             postDone = true;
             postResponse = data;
         });
