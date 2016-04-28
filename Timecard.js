@@ -8,10 +8,6 @@ var de_async = require('deasync');
 var SURFBrowser = require("./SURFBrowser");
 var ServiceNowConnector = require("./ServiceNowConnector.js");
 
-//Initialize SURFBrowser
-var surf = new SURFBrowser();
-surf.setCredentials(config.surfUsername, config.surfPassword);
-
 //Initialize CernaHub connector
 var hub = new ServiceNowConnector(config.cernaHubURL, config.cernaHubUsername, config.cernaHubPassword);
 
@@ -49,6 +45,9 @@ if(timeCards !== false) {
             "saturdayNotes": timeCard.u_saturday_notes
         };
         var tcDone = false;
+        //Initialize SURFBrowser
+        var surf = new SURFBrowser();
+        surf.setCredentials(user.u_surf_username, user.u_surf_password_decrypted);
         surf.insertTimeCard(timeCardObj, function() {
             console.log("Time Card Submitted");
             tcDone = true;
