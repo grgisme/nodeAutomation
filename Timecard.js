@@ -23,6 +23,7 @@ if(timeCards !== false) {
             console.log("Error: User record not successfully grabbed. Time card being skipped.");
             continue;
         }
+        user = user[0];
         //Submit the time cards we found...
         //noinspection JSUnresolvedVariable
         var timeCardObj = {
