@@ -70,6 +70,7 @@ ServiceNowConnector.prototype.postJSONToImportSet = function(importSetName, text
 
     //noinspection JSUnresolvedVariable
     var csv = this._jsonToCSV(result.records);
+    var fileName = importSetName+"_tmp.csv";
 
     fs.writeFileSync(fileName, csv);
 
