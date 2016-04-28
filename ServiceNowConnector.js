@@ -55,6 +55,7 @@ ServiceNowConnector.prototype._post = function(url, options) {
 ServiceNowConnector.prototype._postJSON = function(url, data) {
     var postDone = false;
     var postResponse = false;
+    //noinspection JSUnresolvedFunction
     rest.postJson(url, data, {"username": this.username, "password": this.password})
         .on("complete", function(data) {
             if (data instanceof Error) {
