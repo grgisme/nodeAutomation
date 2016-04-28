@@ -10,6 +10,11 @@ var mime = require('mime');
 function ServiceNowConnector(url, username, password) {
     this.setCredentials(username, password);
     this.setURL(url);
+    this.CREATE = "CREATE";
+    this.UPDATE = "UPDATE";
+    this.SINGLE = "SINGLE";
+    this.QUERY = "QUERY";
+    this.DELETE = "DELETE";
 }
 
 ServiceNowConnector.prototype.setCredentials = function (username, password) {
@@ -81,6 +86,113 @@ ServiceNowConnector.prototype.postJSONToImportSet = function(importSetName, text
     return result;
 };
 
+
+ServiceNowConnector.prototype.getSingleRecord = function(table, recordID) {
+    return this._makeJSONCall(table, this.SINGLE, recordID);
+};
+
+ServiceNowConnector.prototype.getRecords = function(table, query) {
+    if(typeof query == "undefined")
+        query = "";
+    return this._makeJSONCall(table, this.QUERY, false, query);
+};
+
+ServiceNowConnector.prototype.createRecord = function(table, data) {
+    return this._makeJSONCall(table, this.CREATE, false, false, data);
+};
+
+ServiceNowConnector.prototype.updateRecord = function(table, recordID, data) {
+    var query = "sysparm_sys_id="+recordID;
+    return this._makeJSONCall(table, this.UPDATE, false, query, data);
+};
+
+ServiceNowConnector.prototype.deleteRecord = function(table, recordID) {
+    return this._makeJSONCall(table, this.DELETE, recordID);
+};
+
+ServiceNowConnector.prototype._makeJSONCall = function(table, type, sys_id, query, data) {
+
+    var url = table+".do?JSONv2";
+    if(typeof data == "undefined") {
+        data = {};
+    }
+    if(typeof data != "object") {
+        return false;
+    }
+
+    if(type == this.CREATE) {
+        data.sysparm_action = "insert";
+        url = url + "&sysparm_action=insert";
+    }
+    else if(type == this.UPDATE) {
+        data.sysparm_action = "update";
+        url = url + "&sysparm_action=update";
+
+        if(typeof query != "undefined" && query != "") {
+            data.sysparm_query = query;
+        }
+        else return false;
+    }
+    else if(type == this.DELETE) {
+        data.sysparm_action = "deleteRecord";
+        url = url + "&sysparm_action=deleteRecord";
+
+        if(typeof sys_id != "undefined" && sys_id != "") {
+            data.sysparm_sys_id = sys_id;
+        }
+        else return false;
+    }
+    else if(type == this.SINGLE) {
+        data.sysparm_action = "get";
+        data.displayvalue = "all";
+        url = url + "&sysparm_action=get";
+
+        if(typeof sys_id != "undefined" && sys_id != "") {
+            data.sysparm_sys_id = sys_id;
+        }
+        else return false;
+    }
+    else if(type == this.QUERY) {
+        data.sysparm_action = "getRecords";
+        data.displayvalue = "all";
+        url = url + "&sysparm_action=getRecords";
+
+        if(typeof query != "undefined" && query != "") {
+            data.sysparm_query = query;
+        }
+        else return false;
+    }
+
+    var response = this._post(this.url + url, {
+        username: this.username,
+        password: this.password,
+        data: data
+    });
+
+    try {
+        response = JSON.parse(String(response));
+    }
+    catch(e) {
+        console.log("ERROR: JSON Parse of ServiceNow JSONv2 Query failed.");
+        return false;
+    }
+
+
+    if(typeof response.error != "undefined") {
+        console.log("ERROR: "+response.error);
+        return false;
+    }
+    else { //noinspection JSUnresolvedVariable
+        if(typeof response.records == "undefined") {
+                console.log("ERROR: No records elements found.");
+                return false;
+            }
+    }
+
+    //noinspection JSUnresolvedVariable
+    return response.records;
+
+};
 
 if (typeof module === 'object')
     module.exports = ServiceNowConnector;

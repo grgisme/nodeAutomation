@@ -8,57 +8,55 @@ var de_async = require('deasync');
 var SURFBrowser = require("./SURFBrowser");
 var ServiceNowConnector = require("./ServiceNowConnector.js");
 
-//Used for de_async purposes
-var numDone = 0;
-
 //Initialize SURFBrowser
 var surf = new SURFBrowser();
 surf.setCredentials(config.surfUsername, config.surfPassword);
 
+//Initialize CernaHub connector
+var hub = new ServiceNowConnector(config.cernaHubURL, config.cernaHubUsername, config.cernaHubPassword);
 
-/**
- * @param timeCard                  TimeCard object with all the pertinent information about the time card record to submit.
- * @param callBackFunction          Function to call when finished
- * @param timeCard.account          Account name for time card.
- * @param timeCard.deployment       Deployment Number for time card.
- * @param timeCard.resourcePlan     Resource Plan Number for time card.
- * @param timeCard.sunday           Hours for Sunday for time card.
- * @param timeCard.sundayNotes      Notes for Sunday for time card.
- * @param timeCard.monday           Hours for Monday for time card.
- * @param timeCard.mondayNotes      Notes for Monday for time card.
- * @param timeCard.tuesday          Hours for Tuesday for time card.
- * @param timeCard.tuesdayNotes     Notes for Tuesday for time card.
- * @param timeCard.wednesday        Hours for Wednesday for time card.
- * @param timeCard.wednesdayNotes   Notes for Wednesday for time card.
- * @param timeCard.thursday         Hours for Thursday for time card.
- * @param timeCard.thursdayNotes    Notes for Thursday for time card.
- * @param timeCard.friday           Hours for Friday for time card.
- * @param timeCard.fridayNotes      Notes for Friday for time card.
- * @param timeCard.saturday         Hours for Saturday for time card.
- * @param timeCard.saturdayNotes    Notes for Saturday for time card.
- */
-var timeCard = {
-    "account": "Walt Disney Company",
-    "deployment": "DPLY0040582",
-    "resourcePlan": "RPN0081733",
-    "sunday": 1,
-    "monday": 1,
-    "tuesday": 1,
-    "wednesday": 1,
-    "thursday": 1,
-    "friday": 1,
-    "saturday": 1,
-    "sundayNotes": "Testing Note",
-    "mondayNotes": "Testing Note",
-    "tuesdayNotes": "Testing Note",
-    "wednesdayNotes": "Testing Note",
-    "thursdayNotes": "Testing Note",
-    "fridayNotes": "Testing Note",
-    "saturdayNotes": "Testing Note"
-};
+var timeCards = hub.getRecords("time_card", "u_surf_synced=false^u_submitted=false^u_project.u_direct=false^u_user.u_surf_username!=''^u_user.u_surf_password_decrypted!=''");
 
-surf.insertTimeCard(timeCard, function() {
-    console.log("Time Card Submitted");
-    numDone++;
-});
-de_async.loopWhile(function(){return (numDone < 1);});
+if(timeCards !== false) {
+    console.log("Found "+timeCards.length+" time cards.");
+    for(var i=0; i<timeCards.length; i++) {
+        var timeCard = timeCards[i];
+        //noinspection JSUnresolvedVariable
+        var user = hub.getSingleRecord("sys_user", timeCard.u_user);
+        if(user === false) {
+            console.log("Error: User record not successfully grabbed. Time card being skipped.");
+            continue;
+        }
+        //Submit the time cards we found...
+        //noinspection JSUnresolvedVariable
+        var timeCardObj = {
+            "account": timeCard.dv_u_project,
+            "deployment": timeCard.dv_u_deployment,
+            "resourcePlan": timeCard.dv_u_resource_plan,
+            "sunday": timeCard.sunday,
+            "monday": timeCard.monday,
+            "tuesday": timeCard.tuesday,
+            "wednesday": timeCard.wednesday,
+            "thursday": timeCard.thursday,
+            "friday": timeCard.friday,
+            "saturday": timeCard.saturday,
+            "sundayNotes": timeCard.u_sunday_notes,
+            "mondayNotes": timeCard.u_monday_notes,
+            "tuesdayNotes": timeCard.u_tuesday_notes,
+            "wednesdayNotes": timeCard.u_wednesday_notes,
+            "thursdayNotes": timeCard.u_thursday_notes,
+            "fridayNotes": timeCard.u_friday_notes,
+            "saturdayNotes": timeCard.u_saturday_notes
+        };
+        var tcDone = false;
+        surf.insertTimeCard(timeCardObj, function() {
+            console.log("Time Card Submitted");
+            tcDone = true;
+        }, true);
+        de_async.loopWhile(function(){//noinspection JSReferencingMutableVariableFromClosure
+            return !tcDone;});
+    }
+}
+else {
+    console.log("Error occurred, no time cards processed.");
+}
