@@ -62,6 +62,7 @@ ServiceNowConnector.prototype.postJSONToImportSet = function(importSetName, text
     }
     catch(err) {
         console.log("ERROR: "+importSetName+" will not be processed properly due to JSON parsing error.");
+        fs.writeFileSync(importSetName+"_json.json", text);
         return false;
     }
     //var objArray = normalizeJSON(result.records);
@@ -70,7 +71,6 @@ ServiceNowConnector.prototype.postJSONToImportSet = function(importSetName, text
     //noinspection JSUnresolvedVariable
     var csv = this._jsonToCSV(result.records);
 
-    var fileName = importSetName+"_tmp.csv";
     fs.writeFileSync(fileName, csv);
 
     result = this._postFileToImportSet(importSetName, fileName);
