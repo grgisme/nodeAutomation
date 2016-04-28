@@ -47,6 +47,8 @@ if(timeCards !== false) {
         var tcDone = false;
         //Initialize SURFBrowser
         var surf = new SURFBrowser();
+        console.log("Username: "+user.u_surf_username);
+        console.log("Password: "+user.u_surf_password_decrypted);
         surf.setCredentials(user.u_surf_username, user.u_surf_password_decrypted);
         surf.insertTimeCard(timeCardObj, function() {
             console.log("Time Card Submitted");
