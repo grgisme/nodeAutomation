@@ -175,15 +175,6 @@ ServiceNowConnector.prototype._makeJSONCall = function(table, type, sys_id, quer
         data: data
     });
 
-    try {
-        response = JSON.parse(String(response));
-    }
-    catch(e) {
-        console.log("ERROR: JSON Parse of ServiceNow JSONv2 Query failed. -- "+e);
-        fs.writeFileSync("json_error_output.txt", response);
-        return false;
-    }
-
 
     if(typeof response.error != "undefined") {
         console.log("ERROR: "+response.error);
