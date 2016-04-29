@@ -180,7 +180,7 @@ ServiceNowConnector.prototype._makeJSONCall = function(table, type, sys_id, quer
     else if(type == this.QUERY) {
         data.sysparm_action = "getRecords";
         data.displayvalue = "all";
-        url = url + "&sysparm_action=getRecords";
+        url = url + "&sysparm_action=getRecords&displayvalue=all";
 
         if(typeof query != "undefined" && query != "") {
             data.sysparm_query = query;
