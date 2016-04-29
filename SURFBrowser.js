@@ -151,6 +151,7 @@ SURFBrowser.prototype.insertTimeCard = function(timeCard, callBackFunction, debu
     if(typeof debug == "undefined")
         debug = false;
     if(!debug) {
+        //Don't actually submit the time card.
         new Horseman()
             .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0")
             .viewport(1980,1080)
@@ -180,6 +181,8 @@ SURFBrowser.prototype.insertTimeCard = function(timeCard, callBackFunction, debu
             .click("#sys_display\\.time_card\\.u_billing_rate")
             .type("#sys_display\\.time_card\\.u_billing_rate", String(timeCard.resourcePlan).trim())
             .keyboardEvent("keypress", 16777217)
+            .wait(1000)
+            .click("#time_card\\.sunday")
             .wait(1000)
             .select("#time_card\\.u_work_location", "Remote")
             .wait(100)
@@ -224,10 +227,11 @@ SURFBrowser.prototype.insertTimeCard = function(timeCard, callBackFunction, debu
             .wait(500)
             .click("#1acb2a93d46de1006f71c9dad778b517")
             .waitForNextPage()
-            .wait(1000)
-            .click("#submit_timecards")
+            .waitForSelector('#sys_display\\.time_card\\.u_account')
+            .wait(2000)
+            .click("#submit_timecard")
             .waitForNextPage()
-            .wait(500)
+            .wait(2000)
             .then(callBackFunction)
             .close();
     }
