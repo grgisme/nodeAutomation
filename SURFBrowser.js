@@ -64,7 +64,7 @@ SURFBrowser.prototype.grabTimeCards = function(callBackFunction) {
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the time card list")
         .open(query)
-        .wait(15000)
+        .wait(5000)
         .text('pre')
         .then(callBackFunction)
         .close();
@@ -92,7 +92,7 @@ SURFBrowser.prototype.grabDeployments = function(callBackFunction) {
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the deployment list")
         .open(query)
-        .wait(30000)
+        .wait(5000)
         .text('pre')
         .then(callBackFunction)
         .close();
@@ -120,7 +120,7 @@ SURFBrowser.prototype.grabResourcePlans = function(callBackFunction) {
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the resource plan list")
         .open(query)
-        .wait(15000)
+        .wait(5000)
         .text('pre')
         .then(callBackFunction)
         .close();
