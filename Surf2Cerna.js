@@ -6,6 +6,13 @@ var config = require('./config.json');
 var de_async = require('deasync');
 var SURFBrowser = require("./SURFBrowser");
 var ServiceNowConnector = require("./ServiceNowConnector.js");
+var timestamps;
+if(fs.existsSync("timestamps.json"))
+    timestamps = require("./timestamps.json");
+else
+    timestamps = {};
+var currentDate = new Date();
+currentDate.format("%Y-%m-%d");
 
 //Used for de_async purposes
 var numDone = 0;
@@ -21,6 +28,7 @@ surf.setCredentials(config.surfUsername, config.surfPassword);
 surf.grabDeployments(function(text) {
     hub.postJSONToImportSet("u_import_deployment",text);
     numDone++;
+    timestamps.lastDeploymentGrab = currentDate.toDateString();
 });
 de_async.loopWhile(function(){return (numDone < 1);});
 
@@ -29,6 +37,7 @@ surf.grabResourcePlans(function(text) {
     console.log("Processing Resource Plans");
     hub.postJSONToImportSet("u_import_resource_plans", text);
     numDone++;
+    timestamps.lastResourceGrab = currentDate.toDateString();
 });
 de_async.loopWhile(function(){return (numDone < 2);});
 
@@ -37,5 +46,8 @@ surf.grabTimeCards(function(text) {
     console.log("Processing Time Cards");
     hub.postJSONToImportSet("u_import_time_cards_from_surf", text);
     numDone++;
+    timestamps.lastTimeCardGrab = currentDate.toDateString();
 });
 de_async.loopWhile(function(){return (numDone < 3);});
+
+fs.writeFileSync("timecards.json", JSON.stringify(timestamps));

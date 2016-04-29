@@ -2,6 +2,12 @@
  * Created by Garrett on 3/8/2016.
  */
 var Horseman = require("node-horseman");
+var fs = require("fs");
+var timestamps;
+if(fs.existsSync("timestamps.json"))
+    timestamps = require("./timestamps.json");
+else
+    timestamps = {};
 
 var SURFBrowser = function () {
     // do we have an existing instance?
@@ -37,6 +43,12 @@ SURFBrowser.prototype.setPassword = function (password) {
 };
 
 SURFBrowser.prototype.grabTimeCards = function(callBackFunction) {
+    var query = "https://surf.service-now.com/time_card_list.do?JSONv2&displayvalue=true";
+    //noinspection JSUnresolvedVariable
+    if(typeof timestamps.lastTimeCardGrab != "undefined") {
+        //noinspection JSUnresolvedVariable
+        query = query + "sysparm_query=sys_updated_on>="+timestamps.lastTimeCardGrab+" 00:00:00";
+    }
     new Horseman()
         .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0")
         .log("About to grab Time Cards -- logging in")
@@ -51,7 +63,7 @@ SURFBrowser.prototype.grabTimeCards = function(callBackFunction) {
         .wait(5000)
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the time card list")
-        .open("https://surf.service-now.com/time_card_list.do?JSONv2&displayvalue=true")
+        .open(query)
         .wait(15000)
         .text('pre')
         .then(callBackFunction)
@@ -59,6 +71,12 @@ SURFBrowser.prototype.grabTimeCards = function(callBackFunction) {
 };
 
 SURFBrowser.prototype.grabDeployments = function(callBackFunction) {
+    var query = "https://surf.service-now.com/u_deployment_list.do?JSONv2&displayvalue=true";
+    //noinspection JSUnresolvedVariable
+    if(typeof timestamps.lastDepartmentGrab != "undefined") {
+        //noinspection JSUnresolvedVariable
+        query = query + "sysparm_query=sys_updated_on>="+timestamps.lastDepartmentGrab+" 00:00:00";
+    }
     new Horseman()
         .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0")
         .log("About to grab Deployments -- logging in")
@@ -73,7 +91,7 @@ SURFBrowser.prototype.grabDeployments = function(callBackFunction) {
         .wait(5000)
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the deployment list")
-        .open("https://surf.service-now.com/u_deployment_list.do?JSONv2&displayvalue=true")
+        .open(query)
         .wait(30000)
         .text('pre')
         .then(callBackFunction)
@@ -81,6 +99,12 @@ SURFBrowser.prototype.grabDeployments = function(callBackFunction) {
 };
 
 SURFBrowser.prototype.grabResourcePlans = function(callBackFunction) {
+    var query = "https://surf.service-now.com/u_billing_rates_list.do?JSONv2&displayvalue=true";
+    //noinspection JSUnresolvedVariable
+    if(typeof timestamps.lastResourceGrab != "undefined") {
+        //noinspection JSUnresolvedVariable
+        query = query + "sysparm_query=sys_updated_on>="+timestamps.lastResourceGrab+" 00:00:00";
+    }
     new Horseman()
         .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0")
         .log("About to grab Resource Plans -- logging in")
@@ -95,7 +119,7 @@ SURFBrowser.prototype.grabResourcePlans = function(callBackFunction) {
         .wait(5000)
         .log("At SURF Home Page")
         .log("Logged In, now going to grab the resource plan list")
-        .open("https://surf.service-now.com/u_billing_rates_list.do?JSONv2&displayvalue=true")
+        .open(query)
         .wait(15000)
         .text('pre')
         .then(callBackFunction)
