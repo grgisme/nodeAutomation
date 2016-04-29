@@ -187,7 +187,6 @@ ServiceNowConnector.prototype._makeJSONCall = function(table, type, sys_id, quer
         }
         else return false;
     }
-    console.log(JSON.stringify(data));
     var response = this._postJSON(this.url + url, data);
 
 

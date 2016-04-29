@@ -15,11 +15,6 @@ var timeCards = hub.getRecords("time_card", "u_surf_synced=false^u_submitted=fal
 
 if(timeCards !== false) {
     console.log("Found "+timeCards.length+" time cards.");
-    if(timeCards.length == 0) {
-        console.log("Debug output:");
-        for(var x in timeCards)
-            console.log(x+": "+timeCards[x]);
-    }
     for(var i=0; i<timeCards.length; i++) {
         var timeCard = timeCards[i];
         //noinspection JSUnresolvedVariable
