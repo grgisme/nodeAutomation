@@ -53,7 +53,7 @@ if(timeCards !== false) {
         surf.insertTimeCard(timeCardObj, function() {
             console.log("Time Card Submitted");
             tcDone = true;
-        }, true);
+        });
         de_async.loopWhile(function(){//noinspection JSReferencingMutableVariableFromClosure
             return !tcDone;
         });
