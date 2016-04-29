@@ -12,7 +12,7 @@ if(fs.existsSync("timestamps.json"))
     timestamps = require("./timestamps.json");
 else
     timestamps = {};
-var currentDate = String(moment.format('YYYY-MM-DD'));
+var currentDate = String(moment().format('YYYY-MM-DD'));
 
 //Used for de_async purposes
 var numDone = 0;
