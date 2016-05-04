@@ -9,5 +9,11 @@
   "qbAppToken": "",
   "qbAuthToken": "",
   "qbAuthSecret": "",
-  "qbRealmID": ""
+  "qbRealmID": "",
+  "sandbox_qbConsumerKey": "",
+  "sandbox_qbConsumerSecret": "",
+  "sandbox_qbAppToken": "",
+  "sandbox_qbAuthToken": "",
+  "sandbox_qbAuthSecret": "",
+  "sandbox_qbRealmID": ""
 }

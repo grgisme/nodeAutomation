@@ -15,7 +15,7 @@ var qbo = new QuickBooks(config.qbConsumerKey,
                             config.qbAuthSecret,
                             config.qbRealmID,
                             false, // don't use the sandbox (i.e. for testing)
-                            true); // turn debugging on
+                            false); // turn debugging on
 
 
 var timestamps;
@@ -46,5 +46,9 @@ qbo.findTimeActivities({
 de_async.loopWhile(function(){return (!done);});
 
 console.log(timeEntries);
+
+timeEntries.QueryResponse.TimeActivity.forEach(function(timeEntry) {
+    console.log(timeEntry.Description);
+});
 
 fs.writeFileSync("timecards.json", JSON.stringify(timestamps));
