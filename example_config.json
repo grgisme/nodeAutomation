@@ -3,5 +3,11 @@
   "cernaHubPassword": "cerna",
   "cernaHubURL": "https://cernasolutionsdemo.service-now.com/",
   "surfUsername": "surfAccount",
-  "surfPassword": "surfPassword"
+  "surfPassword": "surfPassword",
+  "qbConsumerKey": "",
+  "qbConsumerSecret": "",
+  "qbAppToken": "",
+  "qbAuthToken": "",
+  "qbAuthSecret": "",
+  "qbRealmID": ""
 }
