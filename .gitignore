@@ -54,3 +54,7 @@ node_modules
 .idea
 config.json
 temp
+qbTimeCards_tmp.csv
+qbPayments_tmp.csv
+qbItems_tmp.csv
+qbBillPayments_tmp.csv

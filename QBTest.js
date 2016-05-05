@@ -73,6 +73,7 @@ de_async.loopWhile(function(){return (!done);});
 
 hub.postArrayToImportSet("u_import_qb_customers",customers.QueryResponse.Customer);
 
+
 //Now sync the Time Cards
 var timeEntries = false;
 done = false;
@@ -85,13 +86,7 @@ qbo.findTimeActivities({
 
 de_async.loopWhile(function(){return (!done);});
 
-
-
-//noinspection JSUnresolvedVariable
-csv = hub._jsonToCSV(timeEntries.QueryResponse.TimeActivity);
-fileName = "qbTimeCards_tmp.csv";
-
-//fs.writeFileSync(fileName, csv);
+hub.postArrayToImportSet("u_import_qb_time_cards",timeEntries.QueryResponse.TimeActivity);
 
 
 //fs.writeFileSync("timestamps.json", JSON.stringify(timestamps));
