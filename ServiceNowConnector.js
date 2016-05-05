@@ -111,6 +111,21 @@ ServiceNowConnector.prototype.postJSONToImportSet = function(importSetName, text
     return result;
 };
 
+ServiceNowConnector.prototype.postArrayToImportSet = function(importSetName, array) {
+
+    //noinspection JSUnresolvedVariable
+    var csv = this._jsonToCSV(array);
+    var fileName = importSetName+"_tmp.csv";
+
+    fs.writeFileSync(fileName, csv);
+
+    result = this._postFileToImportSet(importSetName, fileName);
+    if(result !== false)
+        console.log("Successfully posted "+importSetName);
+    fs.unlinkSync(fileName);
+    return result;
+};
+
 
 ServiceNowConnector.prototype.getSingleRecord = function(table, recordID) {
     return this._makeJSONCall(table, this.SINGLE, recordID);

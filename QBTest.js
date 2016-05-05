@@ -7,7 +7,13 @@ var de_async = require('deasync');
 var ServiceNowConnector = require("./ServiceNowConnector.js");
 var moment = require("moment");
 
-var QuickBooks = require('node-quickbooks')
+var QuickBooks = require('node-quickbooks');
+
+var DEBUG = true;
+var sandbox = "";
+if(DEBUG) {
+    sandbox = "sandbox_";
+}
 
 var qbo = new QuickBooks(config.qbConsumerKey,
                             config.qbConsumerSecret,
@@ -29,15 +35,49 @@ var currentDate = String(moment().format('YYYY-MM-DD'));
 var numDone = 0;
 
 //Initialize CernaHub connector
-var hub = new ServiceNowConnector(config.cernaHubURL, config.cernaHubUsername, config.cernaHubPassword);
+var hub = new ServiceNowConnector(config[sandbox+"cernaHubURL"], config[sandbox+"cernaHubUsername"], config[sandbox+"cernaHubPassword"]);
 
 
-var timeEntries = false;
 var done = false;
+var csv;
+var fileName;
+
+//First sync the Employees
+var employees = false;
+done = false;
+qbo.findEmployees({
+    desc: 'MetaData.LastUpdatedTime'
+}, function(err, theEmployees) {
+    employees = theEmployees;
+    done = true;
+});
+
+de_async.loopWhile(function(){return (!done);});
+
+hub.postArrayToImportSet("u_import_qb_employees",employees.QueryResponse.Employee);
+
+
+
+//Next Sync the Customer Accounts
+
+var customers = false;
+done = false;
+qbo.findCustomers({
+    desc: 'MetaData.LastUpdatedTime'
+}, function(err, theCustomers) {
+    customers = theCustomers;
+    done = true;
+});
+
+de_async.loopWhile(function(){return (!done);});
+
+hub.postArrayToImportSet("u_import_qb_customers",customers.QueryResponse.Customer);
+
+//Now sync the Time Cards
+var timeEntries = false;
+done = false;
 qbo.findTimeActivities({
-    desc: 'MetaData.LastUpdatedTime',
-    limit: 5,
-    offset: 0
+    desc: 'MetaData.LastUpdatedTime'
 }, function(err, timeActivities) {
     timeEntries = timeActivities;
     done = true;
@@ -45,24 +85,13 @@ qbo.findTimeActivities({
 
 de_async.loopWhile(function(){return (!done);});
 
-var i=0;
 
 
 //noinspection JSUnresolvedVariable
-var csv = this._jsonToCSV(timeEntries.QueryResponse.TimeActivity);
-var fileName = "qbTimeCards_tmp.csv";
+csv = hub._jsonToCSV(timeEntries.QueryResponse.TimeActivity);
+fileName = "qbTimeCards_tmp.csv";
 
-fs.writeFileSync(fileName, csv);
-/*
-timeEntries.QueryResponse.TimeActivity.forEach(function(timeEntry) {
-    i = i+1;
-    if(i== 1) {
-        for(var x in timeEntry) {
-            
-        }
-    }
-    console.log(timeEntry.Description);
-});
-*/
+//fs.writeFileSync(fileName, csv);
 
-//fs.writeFileSync("timecards.json", JSON.stringify(timestamps));
+
+//fs.writeFileSync("timestamps.json", JSON.stringify(timestamps));
