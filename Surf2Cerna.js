@@ -50,4 +50,4 @@ surf.grabTimeCards(function(text) {
 });
 de_async.loopWhile(function(){return (numDone < 3);});
 
-fs.writeFileSync("timecards.json", JSON.stringify(timestamps));
+fs.writeFileSync("timestamps.json", JSON.stringify(timestamps));

@@ -45,10 +45,24 @@ qbo.findTimeActivities({
 
 de_async.loopWhile(function(){return (!done);});
 
-console.log(timeEntries);
+var i=0;
 
+
+//noinspection JSUnresolvedVariable
+var csv = this._jsonToCSV(timeEntries.QueryResponse.TimeActivity);
+var fileName = "qbTimeCards_tmp.csv";
+
+fs.writeFileSync(fileName, csv);
+/*
 timeEntries.QueryResponse.TimeActivity.forEach(function(timeEntry) {
+    i = i+1;
+    if(i== 1) {
+        for(var x in timeEntry) {
+            
+        }
+    }
     console.log(timeEntry.Description);
 });
+*/
 
-fs.writeFileSync("timecards.json", JSON.stringify(timestamps));
+//fs.writeFileSync("timecards.json", JSON.stringify(timestamps));
